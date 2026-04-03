@@ -4,6 +4,115 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Paul Manga – Realtors | Cartagena de Indias</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--black:#111;--white:#fff;--gold:#c9a84c;--orange:#e07b39;--gray-bg:#f4f4f2;--gray-mid:#e8e8e5;--gray-text:#666;--green:#2a9d5c;--blue:#2563eb;--radius:8px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}body{font-family:'Montserrat',sans-serif;background:var(--gray-bg);color:var(--black);overflow-x:hidden}a{text-decoration:none;color:inherit}
+.topbar{background:var(--black);color:var(--white);padding:0 24px;height:42px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1000;font-size:12px}
+.topbar-search{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:4px;padding:4px 12px;min-width:200px}
+.topbar-search input{background:none;border:none;outline:none;color:var(--white);font-family:inherit;font-size:11.5px;width:100%}
+.topbar-social{display:flex;gap:14px}.topbar-social a{color:rgba(255,255,255,.7);font-size:14px;transition:color .2s}.topbar-social a:hover{color:var(--gold)}
+.topbar-contact{display:flex;gap:18px;font-size:11.5px;color:rgba(255,255,255,.85)}.topbar-contact span{display:flex;align-items:center;gap:5px}.topbar-contact i{color:var(--gold)}
+.navbar{background:var(--white);padding:0 24px;height:68px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gray-mid);box-shadow:0 2px 12px rgba(0,0,0,.07);position:sticky;top:42px;z-index:999}
+.logo{display:flex;align-items:center;gap:12px}.logo-icon{width:44px;height:44px;background:var(--black);border-radius:6px;display:flex;align-items:center;justify-content:center}.logo-icon svg{width:26px;height:26px}
+.logo-text .brand{font-size:17px;font-weight:800;letter-spacing:-.3px}.logo-text .sub{font-size:9.5px;font-weight:500;letter-spacing:.18em;color:var(--gold);text-transform:uppercase}
+.nav-menu{display:flex;align-items:center;gap:2px;list-style:none}.nav-menu li a{display:block;padding:6px 14px;font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:4px;transition:all .2s;color:var(--black)}.nav-menu li a:hover,.nav-menu li a.active{background:var(--black);color:var(--white)}
+.hero{position:relative;height:560px;width:100%}#map{width:100%;height:100%;z-index:1}
+.search-panel{position:absolute;bottom:0;left:50%;transform:translateX(-50%);z-index:10;background:var(--white);border-radius:10px 10px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.15);padding:20px 24px 16px;width:min(980px,96vw)}
+.search-panel h3{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.search-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}.sf{flex:1;min-width:90px}.sf label{display:block;font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--gray-text);margin-bottom:4px}
+.sf select,.sf input{width:100%;padding:8px 9px;border:1px solid var(--gray-mid);border-radius:5px;font-family:inherit;font-size:11.5px;color:var(--black);background:var(--gray-bg);outline:none}.sf select:focus,.sf input:focus{border-color:var(--gold)}
+.sp{display:flex;gap:5px;flex:1.3;min-width:170px}.sp .sf{flex:1}
+.btn-search{background:var(--black);color:var(--white);border:none;padding:9px 22px;border-radius:5px;font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:background .2s;white-space:nowrap;align-self:flex-end;height:36px}.btn-search:hover{background:var(--gold)}
+.sec{padding:48px 32px}.sec-white{background:var(--white)}.sec-dark{background:var(--black)}.sec-gray{background:var(--gray-bg)}
+.sec-hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:6px}.sec-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:8px}.sec-line{width:52px;height:3px;background:var(--gold);border-radius:2px;margin-bottom:28px}
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.prop-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1);transition:box-shadow .25s,transform .25s;cursor:pointer}.prop-card:hover{box-shadow:0 8px 36px rgba(0,0,0,.18);transform:translateY(-4px)}
+.card-img{position:relative;height:210px;overflow:hidden}.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}.prop-card:hover .card-img img{transform:scale(1.05)}
+.badge{position:absolute;top:12px;left:12px;padding:4px 10px;border-radius:3px;font-size:9.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--white)}.bg{background:var(--green)}.bo{background:var(--orange)}.bb{background:var(--blue)}
+.card-zone{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.65);color:var(--white);font-size:9.5px;font-weight:700;text-transform:uppercase;padding:3px 9px;border-radius:3px}
+.card-body{padding:14px 16px 16px}.card-name{font-size:13.5px;font-weight:700;margin-bottom:10px;color:var(--black);line-height:1.3}
+.card-feats{display:flex;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--gray-mid);flex-wrap:wrap}.cf{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--gray-text);font-weight:500}.cf i{color:var(--gold);font-size:11.5px}
+.card-foot{display:flex;align-items:center;justify-content:space-between}.card-price{font-size:19px;font-weight:800;color:var(--black);line-height:1}.card-price span{font-size:10.5px;font-weight:600;color:var(--gray-text);vertical-align:super;margin-right:2px}
+.btn-det{background:var(--gray-bg);border:1px solid var(--gray-mid);color:var(--black);padding:6px 16px;border-radius:4px;font-family:inherit;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s}.btn-det:hover{background:var(--black);color:var(--white);border-color:var(--black)}
+.blog-carousel{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px}.blog-carousel::-webkit-scrollbar{display:none}
+.blog-card{flex:0 0 310px;scroll-snap-align:start;border-radius:var(--radius);overflow:hidden;background:#1a1a1a;border:1px solid #2a2a2a;transition:border-color .2s}.blog-card:hover{border-color:var(--gold)}
+.blog-img{height:175px;overflow:hidden}.blog-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}.blog-card:hover .blog-img img{transform:scale(1.06)}
+.blog-body{padding:16px 18px}.blog-tag{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}.blog-body h4{font-size:13px;font-weight:700;color:var(--white);line-height:1.4;margin-bottom:12px}
+.btn-leer{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:5px 16px;border-radius:4px;font-family:inherit;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s}.btn-leer:hover{background:var(--gold);color:var(--black)}
+.dots{display:flex;justify-content:center;gap:8px;margin-top:24px}.dot{width:10px;height:10px;border-radius:50%;background:var(--gray-mid);border:none;cursor:pointer;transition:background .2s}.dot.active{background:var(--gold)}
+footer{background:var(--black);color:rgba(255,255,255,.8);position:relative;overflow:hidden}
+.f-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);gap:36px;padding:52px 32px 36px;border-bottom:1px solid rgba(255,255,255,.1)}
+.f-col h4{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(201,168,76,.3)}.f-col p{line-height:1.8;color:rgba(255,255,255,.55);font-size:12px;margin-bottom:14px}
+.btn-fb{display:inline-flex;align-items:center;gap:8px;background:#1877f2;color:#fff;padding:8px 14px;border-radius:5px;font-size:11px;font-weight:700}
+.f-contact-item{display:flex;align-items:flex-start;gap:9px;margin-bottom:10px;font-size:12px;color:rgba(255,255,255,.65)}.f-contact-item i{color:var(--gold);font-size:12px;margin-top:2px;flex-shrink:0}
+.f-social{display:flex;gap:9px;margin-top:16px}.f-social a{width:32px;height:32px;border:1px solid rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.55);font-size:12px;transition:all .2s}.f-social a:hover{border-color:var(--gold);color:var(--gold)}
+.f-links{list-style:none}.f-links li{margin-bottom:9px}.f-links a{color:rgba(255,255,255,.55);font-size:12px;display:flex;align-items:center;gap:7px;transition:color .2s}.f-links a::before{content:'';width:5px;height:5px;background:var(--gold);border-radius:50%;flex-shrink:0}.f-links a:hover{color:var(--gold)}
+.btn-ofertar{display:inline-block;background:var(--white);color:var(--black);padding:10px 24px;border-radius:5px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;margin-bottom:12px}.btn-ofertar:hover{background:var(--gold);color:var(--white)}
+.f-bottom{position:relative;z-index:1;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.3)}.f-bottom strong{color:var(--gold)}
+.wa-float{position:fixed;bottom:24px;right:24px;z-index:2000;background:#25d366;color:#fff;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 4px 18px rgba(37,211,102,.4);transition:transform .2s}.wa-float:hover{transform:scale(1.1)}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}.reveal.visible{opacity:1;transform:none}
+@media(max-width:1024px){.cards-grid{grid-template-columns:repeat(2,1fr)}.f-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.topbar-search{display:none}.nav-menu{display:none}.cards-grid{grid-template-columns:1fr}.f-grid{grid-template-columns:1fr;padding:32px 16px 24px}.sec{padding:36px 16px}.f-bottom{flex-direction:column;gap:6px;text-align:center}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-search"><i class="fas fa-search" style="color:rgba(255,255,255,.5);font-size:12px"></i><input type="text" placeholder="Buscar propiedades en Cartagena…"></div>
+  <div class="topbar-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="#"><i class="fab fa-tiktok"></i></a><a href="#"><i class="fab fa-whatsapp"></i></a></div>
+  <div class="topbar-contact"><span><i class="fas fa-phone"></i>(605) 6xx-xxxx</span><span><i class="fas fa-mobile-alt"></i>+57 300 000 0000</span></div>
+</div>
+<nav class="navbar">
+  <div class="logo"><div class="logo-icon"><svg viewBox="0 0 26 26" fill="none"><path d="M13 2L3 9V23H10V16H16V23H23V9L13 2Z" fill="#c9a84c"/><rect x="10" y="16" width="6" height="7" fill="#fff" opacity=".3"/></svg></div><div class="logo-text"><div class="brand">Paul Manga</div><div class="sub">Realtors · Cartagena</div></div></div>
+  <ul class="nav-menu"><li><a href="#" class="active">Inicio</a></li><li><a href="#">Ventas</a></li><li><a href="#">Alquileres</a></li><li><a href="#">Servicios</a></li><li><a href="#">Blog</a></li><li><a href="#">Agente</a></li><li><a href="#">Contáctenos</a></li></ul>
+</nav>
+<section class="hero">
+  <div id="map"></div>
+  <div class="search-panel">
+    <h3>🔍 Búsqueda Avanzada de Propiedades</h3>
+    <div class="search-row">
+      <div class="sf"><label>Ciudad</label><select><option>Cartagena</option></select></div>
+      <div class="sf"><label>Localidad</label><select><option>Todas</option><option>Bocagrande</option><option>Manga</option></select></div>
+      <div class="sf"><label>Zona/Barrio</label><select><option>Todas</option><option>El Laguito</option><option>Castillogrande</option></select></div>
+      <div class="sf"><label>Tipo</label><select><option>Todos</option><option>Apartamento</option><option>Casa</option><option>Local</option></select></div>
+      <div class="sf"><label>Negocio</label><select><option>Todos</option><option>Venta</option><option>Arriendo</option></select></div>
+      <div class="sf"><label>Alcobas</label><select><option>Todas</option><option>1</option><option>2</option><option>3</option><option>4+</option></select></div>
+      <div class="sp"><div class="sf"><label>Precio desde</label><input type="number" placeholder="COP"></div><div class="sf"><label>Precio hasta</label><input type="number" placeholder="COP"></div></div>
+      <button class="btn-search"><i class="fas fa-search"></i> Buscar</button>
+    </div>
+  </div>
+</section>
+<section class="sec sec-white reveal"><div class="sec-hdr"><div><h2 class="sec-title">Inmuebles Destacados</h2><div class="sec-line"></div></div><span style="font-size:12px;color:var(--gray-text)">6 de 24 propiedades</span></div><div class="cards-grid" id="fg"></div></section>
+<section class="sec sec-dark reveal"><div class="sec-hdr" style="margin-bottom:24px"><div><h2 class="sec-title" style="color:#fff">Proyectos &amp; Noticias</h2><div class="sec-line"></div></div></div><div class="blog-carousel" id="bc"></div></section>
+<section class="sec sec-gray reveal"><div class="sec-hdr"><div><h2 class="sec-title">Últimos Inmuebles</h2><div class="sec-line"></div></div></div><div class="cards-grid" id="lg"></div><div class="dots"><button class="dot active"></button><button class="dot"></button></div></section>
+<footer>
+  <div class="f-grid">
+    <div class="f-col"><h4>Quiénes Somos</h4><p>Paul Manga Realtors es una firma inmobiliaria especializada en Cartagena de Indias, con más de 10 años conectando familias con propiedades de lujo en el Caribe colombiano.</p><a href="#" class="btn-fb"><i class="fab fa-facebook-f"></i> Síguenos en Facebook</a></div>
+    <div class="f-col"><h4>Ubicación y Contacto</h4><div class="f-contact-item"><i class="fas fa-map-marker-alt"></i><span>Bocagrande, Carrera 2 #7–35, Cartagena de Indias</span></div><div class="f-contact-item"><i class="fas fa-mobile-alt"></i><span>+57 300 000 0000</span></div><div class="f-contact-item"><i class="fas fa-phone"></i><span>(605) 6xx-xxxx</span></div><div class="f-contact-item"><i class="fas fa-envelope"></i><span>info@paulmangarealtors.com</span></div><div class="f-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="#"><i class="fab fa-tiktok"></i></a><a href="#"><i class="fab fa-whatsapp"></i></a></div></div>
+    <div class="f-col"><h4>Información</h4><ul class="f-links"><li><a href="#">Inicio</a></li><li><a href="#">Ventas</a></li><li><a href="#">Alquileres</a></li><li><a href="#">Servicios</a></li><li><a href="#">Blog</a></li><li><a href="#">Agente</a></li><li><a href="#">Contáctenos</a></li></ul></div>
+    <div class="f-col"><h4>Oferte su Inmueble</h4><p>¿Tiene una propiedad en Cartagena? Le ayudamos a vender o arrendar al mejor precio con nuestra estrategia de marketing digital.</p><button class="btn-ofertar">Ofertar Inmueble</button><div class="f-contact-item"><i class="fab fa-whatsapp" style="color:#25d366"></i><span>Escríbanos por WhatsApp</span></div></div>
+  </div>
+  <div class="f-bottom"><span>© 2025 <strong>Paul Manga Realtors</strong> · Todos los derechos reservados</span><span>Mentoria &amp; Marketing Digital · Cartagena de Indias</span></div>
+</footer>
+<a href="https://wa.me/573000000000" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const P=[{name:"Penthouse Vista al Mar – El Laguito",zone:"El Laguito",badge:"INMUEBLE DISPONIBLE",bc:"bg",m2:280,rooms:4,garage:2,baths:4,price:"1.850.000.000",img:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80"},{name:"Apartamento Lujo – Bocagrande",zone:"Bocagrande",badge:"FRIENDLY AIRBNB",bc:"bo",m2:140,rooms:3,garage:1,baths:2,price:"890.000.000",img:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80"},{name:"Casa Campestre – Castillogrande",zone:"Castillogrande",badge:"MARZO 2026",bc:"bb",m2:420,rooms:5,garage:3,baths:5,price:"3.200.000.000",img:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80"},{name:"Apartaestudio – Bocagrande",zone:"Bocagrande",badge:"DISPONIBLE",bc:"bg",m2:65,rooms:1,garage:1,baths:1,price:"420.000.000",img:"https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80"},{name:"Ático Vista Bahía – La Boquilla",zone:"La Boquilla",badge:"FRIENDLY AIRBNB",bc:"bo",m2:195,rooms:3,garage:2,baths:3,price:"1.100.000.000",img:"https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=600&q=80"},{name:"Dúplex Exclusivo – El Cabrero",zone:"El Cabrero",badge:"DISPONIBLE",bc:"bg",m2:230,rooms:4,garage:2,baths:3,price:"1.450.000.000",img:"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80"}];
+const L2=[{name:"Apartamento 2 Hab – Manga",zone:"Manga",badge:"DISPONIBLE",bc:"bg",m2:110,rooms:2,garage:1,baths:2,price:"650.000.000",img:"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80"},{name:"Local Comercial – Centro Histórico",zone:"Centro",badge:"DISPONIBLE",bc:"bg",m2:85,rooms:0,garage:0,baths:1,price:"480.000.000",img:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80"},{name:"Villa Frente al Mar – Barú",zone:"Barú",badge:"PRÓXIMAMENTE",bc:"bb",m2:380,rooms:5,garage:4,baths:5,price:"4.800.000.000",img:"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80"}];
+const B=[{tag:"Mercado Inmobiliario",title:"Por qué Cartagena es el mejor destino de inversión 2025",img:"https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=600&q=80"},{tag:"Proyectos Nuevos",title:"Torre Brisas del Caribe: Preventa exclusiva en Bocagrande",img:"https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80"},{tag:"Guía del Comprador",title:"Todo lo que necesitas saber antes de comprar en Cartagena",img:"https://images.unsplash.com/photo-1554995207-c18c203602cb?w=600&q=80"},{tag:"Airbnb & Turismo",title:"Cómo maximizar tus ingresos con apartamentos Friendly Airbnb",img:"https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80"}];
+function card(p){return '<div class="prop-card"><div class="card-img"><img src="'+p.img+'" loading="lazy"><span class="badge '+p.bc+'">'+p.badge+'</span><span class="card-zone">'+p.zone+'</span></div><div class="card-body"><div class="card-name">'+p.name+'</div><div class="card-feats"><span class="cf"><i class="fas fa-vector-square"></i>'+p.m2+' m²</span><span class="cf"><i class="fas fa-bed"></i>'+p.rooms+'</span><span class="cf"><i class="fas fa-car"></i>'+p.garage+'</span><span class="cf"><i class="fas fa-bath"></i>'+p.baths+'</span></div><div class="card-foot"><div class="card-price"><span>COP</span>'+p.price+'</div><button class="btn-det">Detalle</button></div></div></div>';}
+document.getElementById('fg').innerHTML=P.map(card).join('');
+document.getElementById('lg').innerHTML=L2.map(card).join('');
+document.getElementById('bc').innerHTML=B.map(p=>'<div class="blog-card"><div class="blog-img"><img src="'+p.img+'" loading="lazy"></div><div class="blog-body"><div class="blog-tag">'+p.tag+'</div><h4>'+p.title+'</h4><button class="btn-leer">Leer</button></div></div>').join('');
+document.querySelectorAll('.dot').forEach(d=>d.addEventListener('click',()=>{document.querySelectorAll('.dot').forEach(x=>x.classList.remove('active'));d.classList.add('active');}));
+var map=L.map('map',{zoomControl:true,scrollWheelZoom:false}).setView([10.4236,-75.5478],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(map);
+[{n:"Bocagrande",lat:10.405,lng:-75.5547,c:8},{n:"El Laguito",lat:10.399,lng:-75.561,c:5},{n:"Castillogrande",lat:10.401,lng:-75.552,c:4},{n:"La Boquilla",lat:10.468,lng:-75.534,c:3},{n:"Manga",lat:10.42,lng:-75.536,c:6},{n:"Centro",lat:10.4236,lng:-75.5478,c:7},{n:"Barú",lat:10.24,lng:-75.597,c:2}].forEach(z=>{L.marker([z.lat,z.lng],{icon:L.divIcon({className:'',html:'<div style="width:42px;height:42px;background:#c9a84c;color:#111;font-weight:800;font-family:Montserrat,sans-serif;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:3px solid #111;box-shadow:0 2px 10px rgba(0,0,0,.3)">'+z.c+'</div>',iconSize:[42,42],iconAnchor:[21,21]})}).addTo(map).bindPopup('<b>'+z.n+'</b><br><small>'+z.c+' propiedades</small>');});
+new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:.1}).observe=function(el){this._orig(el);};
+var obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+</script>
+</body>
+</html>
